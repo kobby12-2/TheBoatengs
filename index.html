@@ -80,37 +80,30 @@
 		const container = document.querySelector('.snap-container');
 		const sections = Array.from(document.querySelectorAll('section.snap-page'));
 
-		// Use the horizontal scroller as the root so mobile browsers trigger reliably
-		const observer = new IntersectionObserver((entries) => {
-			for (const entry of entries) {
-				if (entry.isIntersecting) {
-					entry.target.classList.add('is-visible');
-				} else {
-					entry.target.classList.remove('is-visible');
-				}
-			}
-		}, { root: container, threshold: [0.1, 0.3, 0.5, 0.7, 0.9] });
-
-		sections.forEach((el) => observer.observe(el));
-
-		// Ensure the initial page is marked visible on load for older mobile browsers
-		function markInitialVisible() {
+		function setVisibleByCenter() {
+			const centerX = container.scrollLeft + container.clientWidth / 2;
 			let best = sections[0];
-			let bestOverlap = -1;
-			const rect = container.getBoundingClientRect();
+			let bestDist = Infinity;
 			for (const s of sections) {
-				const r = s.getBoundingClientRect();
-				const overlap = Math.max(0, Math.min(r.right, rect.right) - Math.max(r.left, rect.left));
-				if (overlap > bestOverlap) { bestOverlap = overlap; best = s; }
+				const left = s.offsetLeft;
+				const right = left + s.offsetWidth;
+				const mid = (left + right) / 2;
+				const dist = Math.abs(mid - centerX);
+				if (dist < bestDist) { bestDist = dist; best = s; }
 			}
 			sections.forEach((s) => s.classList.toggle('is-visible', s === best));
 		}
-		markInitialVisible();
-		window.addEventListener('load', markInitialVisible, { once: true });
+
+		// Initialize and keep updated
+		setVisibleByCenter();
+		window.addEventListener('load', setVisibleByCenter, { once: true });
+		window.addEventListener('resize', () => {
+			clearTimeout(container.__visResizeTimer);
+			container.__visResizeTimer = setTimeout(setVisibleByCenter, 100);
+		});
 		container.addEventListener('scroll', () => {
-			// Debounced-ish update to handle quick swipes
 			clearTimeout(container.__visTimer);
-			container.__visTimer = setTimeout(markInitialVisible, 80);
+			container.__visTimer = setTimeout(setVisibleByCenter, 60);
 		}, { passive: true });
 	})();
 	</script>
