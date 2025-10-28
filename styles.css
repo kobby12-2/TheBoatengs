@@ -101,6 +101,40 @@ p, small {
 	* { transition: none !important; animation: none !important; }
 }
 
+/* Mobile animation timing tweaks: slower and more staggered to feel nicer */
+@media (max-width: 600px) {
+	/* Generic elements */
+	.details-line, .attire-line, .qr-line { transition-duration: 1300ms !important; }
+	.logo-wrap img, .photo-wrap img { transition-duration: 1600ms !important; }
+
+	/* Details page stagger */
+	#details-page.is-visible .details-line:nth-child(1) { transition-delay: 140ms !important; }
+	#details-page.is-visible .details-line:nth-child(2) { transition-delay: 280ms !important; }
+	#details-page.is-visible .details-line:nth-child(3) { transition-delay: 420ms !important; }
+	#details-page.is-visible .details-line:nth-child(4) { transition-delay: 560ms !important; }
+	#details-page.is-visible .details-line:nth-child(5) { transition-delay: 700ms !important; }
+	#details-page.is-visible .details-line:nth-child(6) { transition-delay: 840ms !important; }
+
+	/* Attire images */
+	#attire-page.is-visible .attire-line:nth-child(1) { transition-delay: 140ms !important; }
+	#attire-page.is-visible .attire-line:nth-child(2) { transition-delay: 300ms !important; }
+
+	/* Attire pills stagger */
+	#attire-page.is-visible .pill:nth-child(1) { transition-delay: 180ms !important; }
+	#attire-page.is-visible .pill:nth-child(2) { transition-delay: 320ms !important; }
+	#attire-page.is-visible .pill:nth-child(3) { transition-delay: 460ms !important; }
+	#attire-page.is-visible .pill:nth-child(4) { transition-delay: 600ms !important; }
+	#attire-page.is-visible .pill:nth-child(5) { transition-delay: 740ms !important; }
+	#attire-page.is-visible .pill:nth-child(6) { transition-delay: 880ms !important; }
+
+	/* QR page stagger */
+	#qr-page.is-visible .qr-line:nth-child(1) { transition-delay: 140ms !important; }
+	#qr-page.is-visible .qr-line:nth-child(2) { transition-delay: 300ms !important; }
+	#qr-page.is-visible .qr-line:nth-child(3) { transition-delay: 460ms !important; }
+	#qr-page.is-visible .qr-line:nth-child(4) { transition-delay: 620ms !important; }
+	#qr-page.is-visible .qr-line:nth-child(5) { transition-delay: 780ms !important; }
+}
+
 /* Second page (logo) styles */
 #logo-page {
 	position: relative;
