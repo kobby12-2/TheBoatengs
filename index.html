@@ -77,17 +77,41 @@
 
 	<script>
 	(function() {
+		const container = document.querySelector('.snap-container');
+		const sections = Array.from(document.querySelectorAll('section.snap-page'));
+
+		// Use the horizontal scroller as the root so mobile browsers trigger reliably
 		const observer = new IntersectionObserver((entries) => {
 			for (const entry of entries) {
-				if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+				if (entry.isIntersecting) {
 					entry.target.classList.add('is-visible');
 				} else {
 					entry.target.classList.remove('is-visible');
 				}
 			}
-		}, { threshold: [0.6], rootMargin: '0px 15%' });
+		}, { root: container, threshold: [0.1, 0.3, 0.5, 0.7, 0.9] });
 
-		document.querySelectorAll('section.snap-page').forEach((el) => observer.observe(el));
+		sections.forEach((el) => observer.observe(el));
+
+		// Ensure the initial page is marked visible on load for older mobile browsers
+		function markInitialVisible() {
+			let best = sections[0];
+			let bestOverlap = -1;
+			const rect = container.getBoundingClientRect();
+			for (const s of sections) {
+				const r = s.getBoundingClientRect();
+				const overlap = Math.max(0, Math.min(r.right, rect.right) - Math.max(r.left, rect.left));
+				if (overlap > bestOverlap) { bestOverlap = overlap; best = s; }
+			}
+			sections.forEach((s) => s.classList.toggle('is-visible', s === best));
+		}
+		markInitialVisible();
+		window.addEventListener('load', markInitialVisible, { once: true });
+		container.addEventListener('scroll', () => {
+			// Debounced-ish update to handle quick swipes
+			clearTimeout(container.__visTimer);
+			container.__visTimer = setTimeout(markInitialVisible, 80);
+		}, { passive: true });
 	})();
 	</script>
 </body>
