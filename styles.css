@@ -81,13 +81,20 @@ main { min-height: 100%; }
 	max-width: min(72vw, 640px);
 	height: auto;
 	display: block;
+}
+
+/* Unified animation class for all items */
+.animate-item {
 	opacity: 0;
 	transform: translateY(18px) scale(0.96);
 	filter: blur(8px);
 	transition: opacity 1000ms ease, transform 1000ms ease, filter 1000ms ease;
 	will-change: opacity, transform, filter;
 }
-#hero.is-visible .hero-invite {
+
+#hero.is-visible .animate-item,
+#logo-page.is-visible .animate-item,
+#details-page.is-visible .animate-item {
 	opacity: 1;
 	transform: translateY(0) scale(1);
 	filter: blur(0);
@@ -161,21 +168,6 @@ p, small {
 .logo-wrap img {
 	max-width: 100%;
 	height: auto;
-	opacity: 0;
-	transform: translateY(20px) scale(0.94);
-	filter: blur(10px);
-	transition:
-		opacity 1400ms cubic-bezier(.22,.61,.36,1) 120ms,
-		transform 1400ms cubic-bezier(.22,.61,.36,1) 120ms,
-		filter 1400ms cubic-bezier(.22,.61,.36,1) 120ms;
-	will-change: opacity, transform, filter;
-}
-
-/* Animate in when the page is fully visible */
-#logo-page.is-visible .logo-wrap img {
-	opacity: 1;
-	transform: translateY(0) scale(1);
-	filter: blur(0);
 }
 
 /* Third page (details) */
@@ -225,51 +217,13 @@ p, small {
 	color: #7a4a1f; /* caramel accent */
 }
 
-/* Staggered appear animation for details */
-.details-line {
-	opacity: 0;
-	transform: translateY(28px);
-	filter: blur(6px);
-	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
-	animation-fill-mode: forwards;
-}
-
-#details-page.is-visible .details-line {
-	opacity: 1;
-	transform: translateY(0);
-	filter: blur(0);
-}
-
-/* Fallback: Animate on page load/visibility without JS */
-@media (prefers-reduced-motion: no-preference) {
-	.details-line {
-		animation: fadeInUpDetails 900ms ease forwards;
-		animation-play-state: paused;
-	}
-	#details-page.is-visible .details-line {
-		animation-play-state: running;
-	}
-}
-@keyframes fadeInUpDetails {
-	from {
-		opacity: 0;
-		transform: translateY(28px);
-		filter: blur(6px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-		filter: blur(0);
-	}
-}
-
-/* progressive delays */
-#details-page.is-visible .details-line:nth-child(1) { transition-delay: 80ms; }
-#details-page.is-visible .details-line:nth-child(2) { transition-delay: 200ms; }
-#details-page.is-visible .details-line:nth-child(3) { transition-delay: 360ms; }
-#details-page.is-visible .details-line:nth-child(4) { transition-delay: 520ms; }
-#details-page.is-visible .details-line:nth-child(5) { transition-delay: 680ms; }
-#details-page.is-visible .details-line:nth-child(6) { transition-delay: 840ms; }
+/* progressive delays for details page */
+#details-page.is-visible .animate-item:nth-child(1) { transition-delay: 80ms; }
+#details-page.is-visible .animate-item:nth-child(2) { transition-delay: 200ms; }
+#details-page.is-visible .animate-item:nth-child(3) { transition-delay: 360ms; }
+#details-page.is-visible .animate-item:nth-child(4) { transition-delay: 520ms; }
+#details-page.is-visible .animate-item:nth-child(5) { transition-delay: 680ms; }
+#details-page.is-visible .animate-item:nth-child(6) { transition-delay: 840ms; }
 
 /* Fourth page (attire) */
 #attire-page {
