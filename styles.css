@@ -1,0 +1,388 @@
+/* Base resets */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+	margin: 0;
+	color: #fff;
+	background-color: #000; /* fallback while image loads */
+	font-family: "Proxima Nova", proxima-nova, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Helvetica Neue", "Apple Color Emoji", "Segoe UI Emoji";
+	line-height: 1.4;
+}
+
+/* Font placeholders: swap src to your actual font files when available */
+@font-face {
+	font-family: "Ames's Roman Light";
+	src:
+		url("fonts/ames-roman-light.woff2") format("woff2"),
+		url("fonts/ames-roman-light.woff") format("woff"),
+		local("Ames's Roman Light"),
+		local("Ames Roman Light");
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Proxima Nova";
+	src: local("Proxima Nova"), local("Proxima-Nova"); /* placeholder */
+	font-weight: 400 700;
+	font-display: swap;
+}
+
+main { min-height: 100%; }
+
+/* Horizontal swipe container using CSS scroll snap */
+.snap-container {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 100vw;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-snap-type: x mandatory;
+	scroll-behavior: smooth;
+	/* Hide default scrollbars where possible */
+	-ms-overflow-style: none; /* IE/Edge */
+	scrollbar-width: none; /* Firefox */
+}
+.snap-container::-webkit-scrollbar { display: none; }
+
+.snap-page {
+	height: 100svh;
+	height: 100vh;
+	scroll-snap-align: start;
+}
+
+#hero {
+	position: relative;
+	min-height: 100svh;
+	min-height: 100vh;
+	background-image: image-set(
+		url("coffee brown.png") type("image/png")
+	);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: grid;
+	place-items: center;
+	text-align: center;
+	padding: 4rem 1rem;
+}
+
+#hero::after {
+	/* subtle overlay to ensure legibility over busy backgrounds */
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0,0,0,0.25);
+	pointer-events: none;
+}
+
+#hero h1 {
+	position: relative; /* above overlay */
+	margin: 0;
+	font-family: "Ames's Roman Light", "Times New Roman", Times, serif;
+	font-weight: 300;
+	font-style: normal;
+	font-synthesis: none; /* prevent browser from faking bold/italic */
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	/* fluid responsive clamp for large hero text */
+	font-size: clamp(3rem, 9vw + 1rem, 12rem);
+	line-height: 1.05;
+	text-shadow: 0 2px 10px rgba(0,0,0,0.28);
+}
+
+/* Small body text base (not yet used on page 1) */
+p, small {
+	font-family: "Proxima Nova", proxima-nova, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Helvetica Neue";
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	* { transition: none !important; animation: none !important; }
+}
+
+/* Second page (logo) styles */
+#logo-page {
+	position: relative;
+	background-image: image-set(
+		url("caramel background.png") type("image/png")
+	);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: grid;
+	place-items: center;
+}
+
+.logo-wrap {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: min(70vw, 520px);
+	height: min(70vw, 520px);
+}
+
+.logo-wrap img {
+	max-width: 100%;
+	height: auto;
+	opacity: 0;
+	transform: translateY(20px) scale(0.94);
+	filter: blur(10px);
+	transition:
+		opacity 1400ms cubic-bezier(.22,.61,.36,1) 120ms,
+		transform 1400ms cubic-bezier(.22,.61,.36,1) 120ms,
+		filter 1400ms cubic-bezier(.22,.61,.36,1) 120ms;
+	will-change: opacity, transform, filter;
+}
+
+/* Animate in when the page is fully visible */
+#logo-page.is-visible .logo-wrap img {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	filter: blur(0);
+}
+
+/* Third page (details) */
+#details-page {
+    position: relative;
+    background: #fff;
+    background-image: image-set(
+        url("white back.png") type("image/png")
+    );
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: grid;
+    justify-items: center; /* center horizontally */
+    align-items: stretch; /* let content control vertical flow */
+    color: #3b220a; /* caramel-like text color for accents */
+}
+
+.details-wrap {
+    width: min(92vw, 820px);
+    min-height: 100%;
+    padding: clamp(4px, 1vh, 12px) 0 clamp(18px, 5vh, 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* use margins on children for spacing */
+    align-items: center;
+    gap: 0; /* spacing now controlled via margins on children */
+    text-align: center;
+}
+
+.details-wrap img {
+    max-width: 65%;
+	height: auto;
+}
+
+/* (Removed special ampersand overlay) */
+
+/* use margins on lines for vertical spacing (top and bottom) */
+.details-line { margin: clamp(6px, 1.2vh, 14px) 0; }
+.details-line:first-child { margin-top: clamp(10px, 2vh, 20px); }
+.details-line:last-child { margin-bottom: clamp(28px, 6vh, 80px); }
+
+.details-sub {
+	margin: 0.25rem 0 0.5rem;
+	font-family: "Proxima Nova", proxima-nova, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Helvetica Neue";
+	font-size: clamp(1rem, 2.3vw, 1.25rem);
+	color: #7a4a1f; /* caramel accent */
+}
+
+/* Staggered appear animation for details */
+.details-line {
+	opacity: 0;
+	transform: translateY(18px);
+	filter: blur(6px);
+	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
+}
+
+#details-page.is-visible .details-line {
+	opacity: 1;
+	transform: translateY(0);
+	filter: blur(0);
+}
+
+/* progressive delays */
+#details-page.is-visible .details-line:nth-child(1) { transition-delay: 80ms; }
+#details-page.is-visible .details-line:nth-child(2) { transition-delay: 200ms; }
+#details-page.is-visible .details-line:nth-child(3) { transition-delay: 360ms; }
+#details-page.is-visible .details-line:nth-child(4) { transition-delay: 520ms; }
+#details-page.is-visible .details-line:nth-child(5) { transition-delay: 680ms; }
+#details-page.is-visible .details-line:nth-child(6) { transition-delay: 840ms; }
+
+/* Fourth page (attire) */
+#attire-page {
+	position: relative;
+	background: #fff;
+	background-image: image-set(
+		url("white back.png") type("image/png")
+	);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: grid;
+	place-items: center;
+	color: #2b1a0a;
+}
+
+.attire-wrap {
+	width: min(92vw, 820px);
+	min-height: 100%;
+	padding: clamp(10px, 3vh, 28px) 0 clamp(18px, 6vh, 56px);
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: clamp(8px, 1.6vh, 16px);
+	text-align: center;
+}
+
+.attire-wrap img { max-width: 72%; height: auto; }
+.attire-wrap img.attire-title { max-width: 40%; max-height: clamp(52px, 12vh, 140px); }
+.attire-wrap img.attire-subtitle { max-width: 64%; max-height: clamp(64px, 16vh, 200px); }
+
+/* Animate attire images similarly to pills */
+.attire-line {
+	opacity: 0;
+	transform: translateY(18px);
+	filter: blur(6px);
+	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
+}
+
+#attire-page.is-visible .attire-line { opacity: 1; transform: translateY(0); filter: blur(0); }
+#attire-page.is-visible .attire-line:nth-child(1) { transition-delay: 60ms; }
+#attire-page.is-visible .attire-line:nth-child(2) { transition-delay: 160ms; }
+
+/* Fifth page (QR details) */
+#qr-page {
+	position: relative;
+	background-image: image-set(
+		url("coffee brown.png") type("image/png")
+	);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: grid;
+	place-items: center;
+	color: #f3e9dd;
+}
+
+.qr-wrap {
+	width: min(92vw, 820px);
+	min-height: 100%;
+	padding: clamp(12px, 3vh, 28px) 0 clamp(18px, 6vh, 56px);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+}
+
+.qr-wrap img { max-width: 76%; height: auto; }
+.qr-wrap img.qr-title { max-width: 64%; }
+.qr-wrap img.qr-sub { max-width: 80%; }
+.qr-wrap img.qr-code { max-width: 62%; box-shadow: 0 14px 30px rgba(0,0,0,0.35); border-radius: 8px; background: #fff; padding: clamp(8px, 1.4vh, 14px); }
+.qr-wrap img.qr-numbers { max-width: 74%; }
+
+.qr-text {
+	margin: clamp(8px, 2vh, 18px) 0;
+	max-width: min(86vw, 700px);
+	padding: 0 1rem;
+	font-family: "Proxima Nova", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
+	font-size: clamp(1rem, 2.9vw, 1.4rem);
+	line-height: 1.35;
+	color: #e9d8c1;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+}
+
+.qr-line {
+	opacity: 0;
+	transform: translateY(18px);
+	filter: blur(6px);
+	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
+}
+
+#qr-page.is-visible .qr-line { opacity: 1; transform: translateY(0); filter: blur(0); }
+#qr-page.is-visible .qr-line:nth-child(1) { transition-delay: 100ms; }
+#qr-page.is-visible .qr-line:nth-child(2) { transition-delay: 200ms; }
+#qr-page.is-visible .qr-line:nth-child(3) { transition-delay: 320ms; }
+#qr-page.is-visible .qr-line:nth-child(4) { transition-delay: 440ms; }
+#qr-page.is-visible .qr-line:nth-child(5) { transition-delay: 560ms; }
+
+/* Final page (full-screen photo) */
+#photo-page {
+	position: relative;
+	display: grid;
+	place-items: center;
+	background: #000; /* safety background */
+}
+
+.photo-wrap {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	place-items: center;
+}
+
+.photo-wrap img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	opacity: 0;
+	transform: scale(0.98);
+	filter: blur(8px);
+	transition: opacity 1000ms ease, transform 1000ms ease, filter 1000ms ease;
+}
+
+#photo-page.is-visible .photo-wrap img {
+	opacity: 1;
+	transform: scale(1);
+	filter: blur(0);
+}
+.attire-palette {
+	list-style: none;
+	padding: 0;
+	margin: clamp(6px, 1.4vh, 14px) 0 0;
+	display: grid;
+	width: min(70vw, 580px);
+	row-gap: clamp(8px, 1.6vh, 14px);
+}
+
+.pill {
+	border-radius: 9999px;
+	height: clamp(36px, 7vh, 72px);
+	display: grid;
+	place-items: center;
+	color: #f6f2ee;
+	font-family: "Proxima Nova", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	box-shadow: 0 8px 26px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.08);
+	backdrop-filter: blur(4px);
+	opacity: 0;
+	transform: translateY(18px);
+	filter: blur(6px);
+	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
+}
+.pill span { padding: 0 1.1rem; font-size: clamp(0.95rem, 2.6vw, 1.15rem); }
+
+#attire-page.is-visible .pill { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+/* progressive delays */
+#attire-page.is-visible .pill:nth-child(1) { transition-delay: 120ms; }
+#attire-page.is-visible .pill:nth-child(2) { transition-delay: 220ms; }
+#attire-page.is-visible .pill:nth-child(3) { transition-delay: 320ms; }
+#attire-page.is-visible .pill:nth-child(4) { transition-delay: 420ms; }
+#attire-page.is-visible .pill:nth-child(5) { transition-delay: 520ms; }
+#attire-page.is-visible .pill:nth-child(6) { transition-delay: 620ms; }
+
+/* Color definitions to match mockup feel */
+.pill.espresso { background: linear-gradient(135deg, #2c1605 0%, #3a210b 50%, #4a2b10 100%); }
+.pill.caramel  { background: linear-gradient(135deg, #9d6b28 0%, #b57a2e 50%, #c6883a 100%); }
+.pill.almond   { background: linear-gradient(135deg, #b9927b 0%, #c2a089 50%, #caa892 100%); color: #fff; }
+.pill.yogurt   { background: linear-gradient(135deg, #d67e67 0%, #e2907a 50%, #eba08c 100%); }
+.pill.vanilla  { background: linear-gradient(135deg, #c9ab78 0%, #d6bb8b 50%, #e2c99c 100%); color: #fff; }
+.pill.champagne{ background: linear-gradient(135deg, #d8c28c 0%, #e3cf9e 50%, #ecd9ad 100%); color: #fff; }

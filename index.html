@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>You Are Invited</title>
+	<link rel="preload" as="image" href="coffee brown.png">
+	<link rel="preload" as="image" href="caramel background.png">
+	<link rel="preload" as="image" href="white back.png">
+	<link rel="preload" as="image" href="tb brown logo.png">
+	<link rel="preload" as="image" href="together with their families.png">
+	<link rel="preload" as="image" href="samuelKEZIAH.png">
+	<link rel="preload" as="image" href="date.png">
+	<link rel="preload" as="image" href="time.png">
+	<link rel="preload" as="image" href="location.png">
+	<link rel="preload" as="image" href="wedding attire.png">
+	<link rel="preload" as="image" href="the details.png">
+	<link rel="preload" as="image" href="qr code.png">
+	<link rel="preload" as="image" href="numbers.png">
+	<link rel="preload" as="image" href="daddy and mummy front.png">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<main class="snap-container" aria-label="Wedding swipe pages">
+		<section id="hero" class="snap-page" aria-label="Invitation">
+			<h1>YOU ARE INVITED</h1>
+		</section>
+
+		<section id="logo-page" class="snap-page" aria-label="Logo">
+			<div class="logo-wrap" data-animate="logo">
+				<img src="tb brown logo.png" alt="Wedding Logo" width="420" height="420">
+			</div>
+		</section>
+
+		<section id="details-page" class="snap-page" aria-label="Wedding details">
+			<div class="details-wrap">
+				<img class="details-line" src="together with their families.png" alt="together with their families" loading="lazy" style="margin-top: 120px; margin-bottom: 50px;">
+				<img class="details-line" src="samuelKEZIAH.png" alt="Samuel & Keziah" loading="lazy" style=" margin-bottom: 60px;">
+				<p class="details-sub details-line">invite you to celebrate their wedding</p>
+				<img class="details-line" src="date.png" alt="Wedding date" loading="lazy" style="margin-top: 60px;">
+				<img class="details-line" src="time.png" alt="Wedding time" loading="lazy" style="margin-top: 40px;">
+				<img class="details-line" src="location.png" alt="Wedding location" loading="lazy" style="margin-top: 40px;">
+			</div>
+		</section>
+
+		<section id="attire-page" class="snap-page" aria-label="Wedding attire">
+			<div class="attire-wrap">
+				<img class="attire-line attire-title" src="wedding attire.png" alt="wedding attire" loading="lazy" style="margin-top: 100px;">
+				<img class="attire-line attire-subtitle" src="We_kindly_ask_that_guests_coordinate_the_colours_below_into_the.png" alt="Attire guidance" loading="lazy">
+				<ul class="attire-palette">
+					<li class="pill espresso"><span>ESPRESSO</span></li>
+					<li class="pill caramel"><span>CARAMEL</span></li>
+					<li class="pill almond"><span>ALMOND</span></li>
+					<li class="pill yogurt"><span>YOGURT</span></li>
+					<li class="pill vanilla"><span>VANILLA</span></li>
+					<li class="pill champagne"><span>CHAMPAGNE</span></li>
+				</ul>
+			</div>
+		</section>
+
+		<section id="qr-page" class="snap-page" aria-label="The details and QR">
+			<div class="qr-wrap">
+				<img class="qr-line qr-title" src="the details.png" alt="the details" loading="lazy" style="margin-top: 100px;">
+				<p class="qr-line qr-text">Kindly scan the QR code below to get the location of the ceremony</p>
+				<img class="qr-line qr-code" src="qr code.png" alt="QR code" loading="lazy">
+				<img class="qr-line qr-sub" src="for additional information, please contact.png" alt="additional info" loading="lazy">
+				<img class="qr-line qr-numbers" src="numbers.png" alt="contact numbers" loading="lazy">
+			</div>
+		</section>
+
+		<section id="photo-page" class="snap-page" aria-label="Couple photo">
+			<div class="photo-wrap">
+				<img class="photo-line" src="daddy and mummy front.png" alt="Couple photo" loading="lazy">
+			</div>
+		</section>
+	</main>
+
+	<script>
+	(function() {
+		const observer = new IntersectionObserver((entries) => {
+			for (const entry of entries) {
+				if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+					entry.target.classList.add('is-visible');
+				} else {
+					entry.target.classList.remove('is-visible');
+				}
+			}
+		}, { threshold: [0.6], rootMargin: '0px 15%' });
+
+		document.querySelectorAll('section.snap-page').forEach((el) => observer.observe(el));
+	})();
+	</script>
+</body>
+</html>
+
