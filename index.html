@@ -82,30 +82,94 @@
 		const sections = Array.from(document.querySelectorAll('section.snap-page'));
 
 		function setVisibleByCenter() {
-			const centerX = container.scrollLeft + container.clientWidth / 2;
-			let best = sections[0];
-			let bestDist = Infinity;
-			for (const s of sections) {
-				const left = s.offsetLeft;
-				const right = left + s.offsetWidth;
-				const mid = (left + right) / 2;
-				const dist = Math.abs(mid - centerX);
-				if (dist < bestDist) { bestDist = dist; best = s; }
+			const containerRect = container.getBoundingClientRect();
+			const centerX = container.scrollLeft + containerRect.width / 2;
+			let visibleSection = null;
+			let minDist = Infinity;
+
+			sections.forEach(section => {
+				const rect = section.getBoundingClientRect();
+				const sectionLeft = section.offsetLeft;
+				const sectionRight = sectionLeft + section.offsetWidth;
+				const sectionCenter = (sectionLeft + sectionRight) / 2;
+				const distance = Math.abs(sectionCenter - centerX);
+
+				if (distance < minDist) {
+					minDist = distance;
+					visibleSection = section;
+				}
+			});
+
+			// Only update if there's a visible section
+			if (visibleSection) {
+				sections.forEach(s => {
+					if (s === visibleSection) {
+						s.classList.add('is-visible');
+					} else {
+						// Don't remove on first few pages to ensure animations trigger
+						if (Math.abs(s.offsetLeft - visibleSection.offsetLeft) > containerRect.width * 1.5) {
+							s.classList.remove('is-visible');
+						}
+					}
+				});
 			}
-			sections.forEach((s) => s.classList.toggle('is-visible', s === best));
 		}
 
-		// Initialize and keep updated
+		// Debounce function
+		function debounce(func, wait) {
+			let timeout;
+			return function executedFunction(...args) {
+				const later = () => {
+					clearTimeout(timeout);
+					func(...args);
+				};
+				clearTimeout(timeout);
+				timeout = setTimeout(later, wait);
+			};
+		}
+
+		// Throttled scroll handler for smoother animation triggers
+		let lastScrollTime = 0;
+		const scrollHandler = () => {
+			const now = Date.now();
+			if (now - lastScrollTime >= 50) {
+				setVisibleByCenter();
+				lastScrollTime = now;
+			}
+		};
+
+		// Initialize
 		setVisibleByCenter();
-		window.addEventListener('load', setVisibleByCenter, { once: true });
-		window.addEventListener('resize', () => {
-			clearTimeout(container.__visResizeTimer);
-			container.__visResizeTimer = setTimeout(setVisibleByCenter, 100);
+		
+		// Event listeners
+		window.addEventListener('load', () => {
+			setTimeout(setVisibleByCenter, 200);
+			setTimeout(setVisibleByCenter, 400);
+		}, { once: true });
+		
+		// Force initial animation after a brief delay
+		setTimeout(() => {
+			setVisibleByCenter();
+			sections[0].classList.add('is-visible');
+		}, 50);
+		
+		window.addEventListener('resize', debounce(() => {
+			setTimeout(setVisibleByCenter, 150);
+		}, 250));
+		
+		container.addEventListener('scroll', scrollHandler, { passive: true });
+		
+		// Touch end handler for better mobile responsiveness
+		container.addEventListener('touchstart', () => {
+			container.removeEventListener('scroll', setVisibleByCenter);
+		}, { once: true });
+		
+		container.addEventListener('touchend', () => {
+			setTimeout(() => {
+				setVisibleByCenter();
+				container.addEventListener('scroll', scrollHandler, { passive: true });
+			}, 200);
 		});
-		container.addEventListener('scroll', () => {
-			clearTimeout(container.__visTimer);
-			container.__visTimer = setTimeout(setVisibleByCenter, 60);
-		}, { passive: true });
 	})();
 	</script>
 </body>
