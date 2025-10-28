@@ -20,27 +20,28 @@
 	<link rel="preload" as="image" href="daddy and mummy front.png">
 	<link rel="preload" as="image" href="YOU ARE INVITED.png">
 	<link rel="stylesheet" href="styles.css">
+	<script src="animations.js" defer></script>
 </head>
 <body>
 	<main class="snap-container" aria-label="Wedding swipe pages">
 		<section id="hero" class="snap-page" aria-label="Invitation">
-			<img class="hero-invite" src="YOU ARE INVITED.png" alt="You Are Invited" loading="eager">
+			<img class="hero-invite animate-item" src="YOU ARE INVITED.png" alt="You Are Invited" loading="eager">
 		</section>
 
 		<section id="logo-page" class="snap-page" aria-label="Logo">
-			<div class="logo-wrap" data-animate="logo">
-				<img src="tb brown logo.png" alt="Wedding Logo" width="420" height="420">
+			<div class="logo-wrap">
+				<img class="animate-item" src="tb brown logo.png" alt="Wedding Logo" width="420" height="420">
 			</div>
 		</section>
 
 		<section id="details-page" class="snap-page" aria-label="Wedding details">
 			<div class="details-wrap">
-				<img class="details-line" src="together with their families.png" alt="together with their families" loading="lazy" style="margin-top: 100px; margin-bottom: 50px;">
-				<img class="details-line" src="samuelKEZIAH.png" alt="Samuel & Keziah" loading="lazy" style=" margin-bottom: 60px;">
-				<p class="details-sub details-line">invite you to celebrate their wedding</p>
-				<img class="details-line" src="date.png" alt="Wedding date" loading="lazy" style="margin-top: 60px;">
-				<img class="details-line" src="time.png" alt="Wedding time" loading="lazy" style="margin-top: 40px;">
-				<img class="details-line" src="location.png" alt="Wedding location" loading="lazy" style="margin-top: 40px;">
+				<img class="details-line animate-item" src="together with their families.png" alt="together with their families" loading="lazy" style="margin-top: 100px; margin-bottom: 50px;">
+				<img class="details-line animate-item" src="samuelKEZIAH.png" alt="Samuel & Keziah" loading="lazy" style=" margin-bottom: 60px;">
+				<p class="details-sub details-line animate-item">invite you to celebrate their wedding</p>
+				<img class="details-line animate-item" src="date.png" alt="Wedding date" loading="lazy" style="margin-top: 60px;">
+				<img class="details-line animate-item" src="time.png" alt="Wedding time" loading="lazy" style="margin-top: 40px;">
+				<img class="details-line animate-item" src="location.png" alt="Wedding location" loading="lazy" style="margin-top: 40px;">
 			</div>
 		</section>
 
@@ -76,102 +77,6 @@
 		</section>
 	</main>
 
-	<script>
-	(function() {
-		const container = document.querySelector('.snap-container');
-		const sections = Array.from(document.querySelectorAll('section.snap-page'));
-
-		function setVisibleByCenter() {
-			const containerRect = container.getBoundingClientRect();
-			const centerX = container.scrollLeft + containerRect.width / 2;
-			let visibleSection = null;
-			let minDist = Infinity;
-
-			sections.forEach(section => {
-				const rect = section.getBoundingClientRect();
-				const sectionLeft = section.offsetLeft;
-				const sectionRight = sectionLeft + section.offsetWidth;
-				const sectionCenter = (sectionLeft + sectionRight) / 2;
-				const distance = Math.abs(sectionCenter - centerX);
-
-				if (distance < minDist) {
-					minDist = distance;
-					visibleSection = section;
-				}
-			});
-
-			// Only update if there's a visible section
-			if (visibleSection) {
-				sections.forEach(s => {
-					if (s === visibleSection) {
-						s.classList.add('is-visible');
-					} else {
-						// Don't remove on first few pages to ensure animations trigger
-						if (Math.abs(s.offsetLeft - visibleSection.offsetLeft) > containerRect.width * 1.5) {
-							s.classList.remove('is-visible');
-						}
-					}
-				});
-			}
-		}
-
-		// Debounce function
-		function debounce(func, wait) {
-			let timeout;
-			return function executedFunction(...args) {
-				const later = () => {
-					clearTimeout(timeout);
-					func(...args);
-				};
-				clearTimeout(timeout);
-				timeout = setTimeout(later, wait);
-			};
-		}
-
-		// Throttled scroll handler for smoother animation triggers
-		let lastScrollTime = 0;
-		const scrollHandler = () => {
-			const now = Date.now();
-			if (now - lastScrollTime >= 50) {
-				setVisibleByCenter();
-				lastScrollTime = now;
-			}
-		};
-
-		// Initialize
-		setVisibleByCenter();
-		
-		// Event listeners
-		window.addEventListener('load', () => {
-			setTimeout(setVisibleByCenter, 200);
-			setTimeout(setVisibleByCenter, 400);
-		}, { once: true });
-		
-		// Force initial animation after a brief delay
-		setTimeout(() => {
-			setVisibleByCenter();
-			sections[0].classList.add('is-visible');
-		}, 50);
-		
-		window.addEventListener('resize', debounce(() => {
-			setTimeout(setVisibleByCenter, 150);
-		}, 250));
-		
-		container.addEventListener('scroll', scrollHandler, { passive: true });
-		
-		// Touch end handler for better mobile responsiveness
-		container.addEventListener('touchstart', () => {
-			container.removeEventListener('scroll', setVisibleByCenter);
-		}, { once: true });
-		
-		container.addEventListener('touchend', () => {
-			setTimeout(() => {
-				setVisibleByCenter();
-				container.addEventListener('scroll', scrollHandler, { passive: true });
-			}, 200);
-		});
-	})();
-	</script>
 </body>
 </html>
 
