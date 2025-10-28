@@ -76,19 +76,21 @@ main { min-height: 100%; }
 	pointer-events: none;
 }
 
-#hero h1 {
-	position: relative; /* above overlay */
-	margin: 0;
-	font-family: "Ames's Roman Light", "Times New Roman", Times, serif;
-	font-weight: 300;
-	font-style: normal;
-	font-synthesis: none; /* prevent browser from faking bold/italic */
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	/* fluid responsive clamp for large hero text */
-	font-size: clamp(3rem, 9vw + 1rem, 12rem);
-	line-height: 1.05;
-	text-shadow: 0 2px 10px rgba(0,0,0,0.28);
+.hero-invite {
+	position: relative;
+	max-width: min(72vw, 640px);
+	height: auto;
+	display: block;
+	opacity: 0;
+	transform: translateY(18px) scale(0.96);
+	filter: blur(8px);
+	transition: opacity 1000ms ease, transform 1000ms ease, filter 1000ms ease;
+	will-change: opacity, transform, filter;
+}
+#hero.is-visible .hero-invite {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	filter: blur(0);
 }
 
 /* Small body text base (not yet used on page 1) */
@@ -226,7 +228,7 @@ p, small {
 /* Staggered appear animation for details */
 .details-line {
 	opacity: 0;
-	transform: translateY(18px);
+	transform: translateY(28px);
 	filter: blur(6px);
 	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
 }
