@@ -231,12 +231,36 @@ p, small {
 	transform: translateY(28px);
 	filter: blur(6px);
 	transition: opacity 900ms ease, transform 900ms ease, filter 900ms ease;
+	animation-fill-mode: forwards;
 }
 
 #details-page.is-visible .details-line {
 	opacity: 1;
 	transform: translateY(0);
 	filter: blur(0);
+}
+
+/* Fallback: Animate on page load/visibility without JS */
+@media (prefers-reduced-motion: no-preference) {
+	.details-line {
+		animation: fadeInUpDetails 900ms ease forwards;
+		animation-play-state: paused;
+	}
+	#details-page.is-visible .details-line {
+		animation-play-state: running;
+	}
+}
+@keyframes fadeInUpDetails {
+	from {
+		opacity: 0;
+		transform: translateY(28px);
+		filter: blur(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+		filter: blur(0);
+	}
 }
 
 /* progressive delays */
